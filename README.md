@@ -6,7 +6,7 @@
 - based on a CNN called 'MELNYK-Net';
 
 - implemented in Keras with TensorFlow backend: 
-![Architecture]('architecture)
+![Architecture](architecture.png)
 
 
 - Trained on CASIA-HWDB1.0-1.1 datasets collected by National Laboratory of Pattern Recognition (NLPR), Institute of Automation of Chinese Academy of Sciences (CASIA), written by 420 and 300 persons. The overall training dataset contains 2,678,424 samples.
@@ -28,4 +28,4 @@
     
 
 ## Demo:
-![Demo]('demo.PNG')
+![Demo](demo.PNG)
