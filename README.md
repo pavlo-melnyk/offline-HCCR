@@ -11,7 +11,7 @@
 
 - Trained on CASIA-HWDB1.0-1.1 datasets collected by National Laboratory of Pattern Recognition (NLPR), Institute of Automation of Chinese Academy of Sciences (CASIA), written by 420 and 300 persons. The overall training dataset contains 2,678,424 samples.
 
-- Evaluated on the most common benchmark dataset – ICDAR-2013 competition dataset, containing 224,419 samples written by 60 persons.
+- Evaluated on the most common benchmark – ICDAR-2013 competition dataset containing 224,419 samples written by 60 persons.
 
 - **Final accuracy** - 97,00%.
 
