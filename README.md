@@ -3,13 +3,10 @@
 
 - recognizes isolated handwritten Chinese characters among 3755 classes of GB2312-80 level-1 standard;
 
-- based on a CNN called 'MELNYK-Net' with the following architecture:
-
-Input - 64C3 - 64C3 - MP2 - 96C3 - 96C3 - MP2 - 128C3 - 128C3 - MP2 - 256C3(Drop) - 256C3(Drop) - MP2 - 512C3(Drop) - 512C3(Drop) - MP2 -
-512C3 - GAP(Drop) - 3755Output
+- based on a CNN called 'MELNYK-Net';
 
 - implemented in Keras with TensorFlow backend: 
-![Architecture]('architecture.png')
+![Architecture]('architecture)
 
 
 - Trained on CASIA-HWDB1.0-1.1 datasets collected by National Laboratory of Pattern Recognition (NLPR), Institute of Automation of Chinese Academy of Sciences (CASIA), written by 420 and 300 persons. The overall training dataset contains 2,678,424 samples.
@@ -31,4 +28,4 @@ Input - 64C3 - 64C3 - MP2 - 96C3 - 96C3 - MP2 - 128C3 - 128C3 - MP2 - 256C3(Drop
     
 
 ## Demo:
-![Demo]('demo.png')
+![Demo]('demo.PNG')
