@@ -19,10 +19,11 @@
 
 
 ## Usage:
- - before using the application, please download [MELNYK-Net](https://drive.google.com/open?id=12UVBrGixJLmg6er1bsLC52rWIlSv00Fs) and place it in the directory with the other files (don't change the name);
+ - before using the application, please download [MELNYK-Net](https://drive.google.com/open?id=12UVBrGixJLmg6er1bsLC52rWIlSv00Fs) and place it in the directory with the other files (don't rename it);
  - run 'main.py';
  - follow the prompt instructions:
     - specify the isolated character image/images directory (e.g. 'images/'; it will upload all the images from this folder);
+       supports both b&w and colorful images;
     - specify *n* number of candidates for recognition - will show *n* most confident predictions per each character image;
     - type 'y' if you want to continue using application.
     
