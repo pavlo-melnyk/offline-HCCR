@@ -11,11 +11,9 @@ Input - 64C3 - 64C3 - MP2 - 96C3 - 96C3 - MP2 - 128C3 - 128C3 - MP2 - 256C3(Drop
 
  - for more details, you can use the 'architecture.prototxt' file and Netscope CNN Analyzer (by ethereon; extended for CNN Analysis by dgschwend) - http://dgschwend.github.io/netscope/quickstart.html;
 
-- Trained on:
-CASIA-HWDB1.0-1.1 datasets collected by National Laboratory of Pattern Recognition (NLPR), Institute of Automation of Chinese Academy of Sciences (CASIA), written by 420 and 300 persons. The overall training dataset contains 2,678,424 samples.
+- Trained on CASIA-HWDB1.0-1.1 datasets collected by National Laboratory of Pattern Recognition (NLPR), Institute of Automation of Chinese Academy of Sciences (CASIA), written by 420 and 300 persons. The overall training dataset contains 2,678,424 samples.
 
-- Evaluated on:
-the most common benchmark dataset – ICDAR-2013 competition dataset, containing 224,419 samples written by 60 persons.
+- Evaluated on the most common benchmark dataset – ICDAR-2013 competition dataset, containing 224,419 samples written by 60 persons.
 
 - Final accuracy - 97,00%.
 
