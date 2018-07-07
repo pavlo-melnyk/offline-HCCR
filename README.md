@@ -23,9 +23,9 @@ Input - 64C3 - 64C3 - MP2 - 96C3 - 96C3 - MP2 - 128C3 - 128C3 - MP2 - 256C3(Drop
 ## Usage:
  - run 'main.py';
  - follow the prompt instructions:
-    - specify the isolated character image/ filepath (e.g. 'imgs/1.png');
-    - specify the n number of candidates for recognition - will show n most confident predictions;
-    - type 'y' if you want to continue.
+    - specify the isolated character image/images directory (e.g. 'imgs/'; it will upload all the images from this folder);
+    - specify the n number of candidates for recognition - will show n most confident predictions per each character image;
+    - type 'y' if you want to continue using application.
     
 
 ## Demo:
