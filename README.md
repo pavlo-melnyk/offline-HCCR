@@ -13,9 +13,9 @@
 
 - Evaluated on the most common benchmark dataset – ICDAR-2013 competition dataset, containing 224,419 samples written by 60 persons.
 
-- Final accuracy - 97,00%.
+- **Final accuracy** - 97,00%.
 
-- Total number of parameters - 9,145,643 (~35 MB of storage).
+- **Total number of parameters** - 9,145,643 (~35 MB of storage).
 
 
 ## Usage:
