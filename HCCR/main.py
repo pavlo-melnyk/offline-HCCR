@@ -15,7 +15,7 @@ def main():
 	while True:
 		data_filepath = input('Please specify data filepath:\n')
 		data = load_data(data_filepath)
-		num_predictions = int(input('Please specify number of candidates per segment:\n'))
+		num_predictions = int(input('Please specify number of character candidates per image:\n'))
 		chars_candidates, scores = hccr.predict(data, num_predictions=num_predictions, verbose=1)
 				
 		prompt = input('\nPress "y" to continue...\n')
