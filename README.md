@@ -29,4 +29,4 @@
     
 
 ## Demo:
-![Demo](demo.PNG)
+![Demo](demo.png)
