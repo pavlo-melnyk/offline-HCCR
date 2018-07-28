@@ -17,6 +17,8 @@
 
 - **Total number of parameters** - 9,145,643 (~35 MB of storage).
 
+## Dependencies:
+Python3, tensorflow 1.7, keras 2.1.6, scipy, numpy, matplotlib, pyplotz, skimage, glob, struct, h5py
 
 ## Usage:
  - before using the application, please download [MELNYK-Net](https://drive.google.com/open?id=12UVBrGixJLmg6er1bsLC52rWIlSv00Fs) and place it in the directory with the other files (don't rename it);
