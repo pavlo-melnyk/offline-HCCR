@@ -21,7 +21,7 @@
 Python3, tensorflow 1.7, keras 2.1.6, scipy, numpy, matplotlib, pyplotz, skimage, glob, struct, h5py
 
 ## Usage:
- - before using the application, please download [MELNYK-Net](https://drive.google.com/open?id=1s8PQo7CKpOGdo-eXwtYeweY8-yjs7RYp) and place it in the directory with the other files (don't rename it);
+ - before using the application, please download [Melnyk-Net](https://drive.google.com/open?id=1s8PQo7CKpOGdo-eXwtYeweY8-yjs7RYp) and place it in the directory with the other files (don't rename it);
  - run 'main.py';
  - follow the prompt instructions:
     - specify the isolated character image/images directory (e.g. 'images'; it will upload all the images from this folder);
