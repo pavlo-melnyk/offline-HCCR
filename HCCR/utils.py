@@ -1,16 +1,59 @@
+''' 
+The functions normalize_bitmap, tagcode_to_unicode and unicode_to_tagcode
+are written by Alessandro and Francesco https://github.com/integeruser/CASIA-HWDB1.1-cnn
+'''
+
 import os
 import struct
+
 import numpy as np
-import skimage.exposure
+import scipy.misc
+
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
-from scipy.misc import imresize
+import h5py
+
 from skimage.filters import threshold_otsu
-from skimage import io
+
 from glob import glob
 
-img_shape = (96, 96)
+from keras.layers import (
+	Input,
+	Activation,
+	Dense,
+	Flatten,
+	GlobalAveragePooling2D
+)
+from keras import backend as K
+from keras.preprocessing import image
+from keras.preprocessing.image import ImageDataGenerator
+
+
+IMG_SHAPE = (96, 96)
+
+
+class GlobalWeightedAveragePooling2D(GlobalAveragePooling2D):
+
+	def __init__(self, kernel_initializer='uniform', **kwargs):
+		self.kernel_initializer = kernel_initializer
+		super(GlobalWeightedAveragePooling2D, self).__init__(**kwargs)
+
+	def build(self, input_shape):
+		self.W = self.add_weight(name='W',
+								 shape=input_shape[1:],
+								 initializer=self.kernel_initializer,
+								 trainable=True)
+		# print('input_shape:', input_shape)
+		super(GlobalWeightedAveragePooling2D, self).build(input_shape)
+
+	def call(self, inputs):
+		inputs = inputs*self.W # element-wise multiplication for every entry of input
+		if self.data_format == 'channels_last':
+			return K.sum(inputs, axis=[1, 2])
+		else:
+			return K.sum(inputs, axis=[2, 3])
+
 
 def normalize_bitmap(bitmap):
 	# pad the bitmap to make it squared
@@ -22,29 +65,22 @@ def normalize_bitmap(bitmap):
 	bitmap = np.lib.pad(bitmap, pad_dims, mode='constant', constant_values=255)
 
 	# rescale and add empty border
-	bitmap = imresize(bitmap, (96 - 4*2, 96 - 4*2))
+	bitmap = scipy.misc.imresize(bitmap, (96 - 4*2, 96 - 4*2))
 	bitmap = np.lib.pad(bitmap, ((4, 4), (4, 4)), mode='constant', constant_values=255)
-	assert bitmap.shape == img_shape
+	assert bitmap.shape == IMG_SHAPE
 
 	bitmap = np.expand_dims(bitmap, axis=0)
-	assert bitmap.shape == (1, *img_shape)
+	assert bitmap.shape == (1, *IMG_SHAPE)
 	return bitmap
 
 
-
 def preprocess_bitmap(bitmap):
-	# reverse the gray values to ensure the fast computation on the training step:
+	# inverse the gray values:
 	bitmap = 255 - bitmap
-
-	# contrast stretching
-	p2, p98 = np.percentile(bitmap, (2, 98))
-	bitmap = skimage.exposure.rescale_intensity(bitmap, in_range=(p2, p98))
-										
 	return bitmap
 
 
 def tagcode_to_unicode(tagcode):
-	# print(struct.pack('>H', tagcode).decode('gbk'))
 	return struct.pack('>H', tagcode).decode('gbk')
 
 
@@ -59,8 +95,7 @@ def rgb2gray(rgb):
 def preprocess_input(img, show_img=False):
 		'''
 		Preprocesses an input image for futrther prediction
-		'''             
-				
+		'''	
 		if show_img:
 			print('\nOriginal image shape:', img.shape)
 			plt.imshow(img)
@@ -76,42 +111,42 @@ def preprocess_input(img, show_img=False):
 			gray_img[gray_img < thresh] = 0
 			gray_img = 255 - gray_img 
 
-		# if show_img:
-		# 	print('Grayscale image shape:', gray_img.shape)
-		# 	plt.imshow(gray_img, cmap='gray')
-		# 	plt.title('grayscaled')
-		# 	plt.show()
-
+	
 		norm_img = normalize_bitmap(np.array(gray_img, dtype=np.uint8))
-		prepr_img = np.array(preprocess_bitmap(norm_img), dtype=np.uint8).reshape(1, *img_shape, 1)
+		prepr_img = np.array(preprocess_bitmap(norm_img), dtype=np.uint8).reshape(1, *IMG_SHAPE, 1)
 		if show_img:
-			# print('Normalized image shape:', norm_img.shape)
-			# plt.imshow(norm_img.reshape(*img_shape), cmap='gray')
-			# plt.title('normalized')
-			# plt.show()
+			
 			print('Preprocessed image shape:', prepr_img.shape)
-			plt.imshow(prepr_img.reshape(*img_shape), cmap='gray')
+			plt.imshow(prepr_img.reshape(*IMG_SHAPE), cmap='gray')
 			plt.title('preprocessed')
-			# plt.savefig('prepr_img.png')
 			plt.show()
 
 		return prepr_img
 
 
-def load_data(PATH_TO_TEST_IMAGES_DIR):
+def load_data(image_path=None):
 	print('\nLoading the data.....................................')
-	files = glob(PATH_TO_TEST_IMAGES_DIR + '/*.png') # for .png
-	files += glob(PATH_TO_TEST_IMAGES_DIR + '/*.jp*g')	# append for .jpg and .jped
-	n_files = len(files)
-	print('Found %d images in the specified directory\n' % n_files)
-	# print(files)
-	
-	prepr_imgs = np.empty((n_files, 96, 96, 1))
-	imgs = []
-	for i, img_filepath in enumerate(files):
-		img = io.imread(img_filepath)
-		imgs.append(img)
+	if image_path and image_path[-4:].lower() in ['.png', '.jpg', 'jpeg']:
+		img = np.array(image.load_img(image_path))
 		prepr_img = preprocess_input(img, show_img=False)
-		prepr_imgs[i] = prepr_img
-	
-	return imgs, prepr_imgs
+		print()
+
+		return [img], prepr_img
+		
+	elif image_path:
+		files = glob(image_path + '/*.png') # for .png
+		files += glob(image_path + '/*.jp*g') # append for .jpg and .jped
+		n_files = len(files)
+		print('Found %d images in the specified directory\n' % n_files)
+		# print(files)
+				
+		prepr_imgs = np.empty((n_files, 96, 96, 1))
+		imgs = []
+		for i, img_filepath in enumerate(files):
+			img = np.array(image.load_img(img_filepath))
+			imgs.append(img)
+			prepr_img = preprocess_input(img, show_img=False)
+			prepr_imgs[i] = prepr_img	
+
+		return imgs, prepr_imgs
+
