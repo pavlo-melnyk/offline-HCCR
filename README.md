@@ -3,7 +3,7 @@
 
 - recognizes isolated handwritten Chinese characters among 3755 classes of GB2312-80 level-1 standard;
 
-- based on a CNN called Melnyk-Net ([Melnyk et al, “A High-Performance CNN Method for Offline Handwritten Chinese Character Recognition and Visualization”, 2018](https://arxiv.org/abs/1812.11489));
+- based on a CNN called Melnyk-Net [[Melnyk et al, “A High-Performance CNN Method for Offline Handwritten Chinese Character Recognition and Visualization”, 2018]](https://arxiv.org/abs/1812.11489);
 
 - implemented using the amazing Keras library with the TensorFlow backend: 
 ![Architecture](architecture.png)
