@@ -5,7 +5,7 @@
 
 - based on a CNN called Melnyk-Net ([Melnyk et al, “A High-Performance CNN Method for Offline Handwritten Chinese Character Recognition and Visualization”, 2018])(https://arxiv.org/abs/1812.11489);
 
-- implemented in Keras with TensorFlow backend: 
+- implemented using the amazing Keras library with the TensorFlow backend: 
 ![Architecture](architecture.png)
 
 
@@ -18,7 +18,7 @@
 - **Total number of parameters** - 6,523,819 (~24.9 MB of storage).
 
 ## Dependencies:
-Python3, tensorflow 1.7, keras 2.1.6, scipy, numpy, matplotlib, pyplotz, skimage, glob, struct, h5py
+Python3, tensorflow 1.7, keras 2.1.6, scipy, numpy, matplotlib, pyplotz, glob, struct, h5py
 
 ## Usage:
  - before using the application, please download [Melnyk-Net](https://drive.google.com/open?id=1s8PQo7CKpOGdo-eXwtYeweY8-yjs7RYp) and place it in the directory with the other files (don't rename it);
@@ -31,7 +31,8 @@ Python3, tensorflow 1.7, keras 2.1.6, scipy, numpy, matplotlib, pyplotz, skimage
 
 ## Demo:
 ![Demo](demo.png)
-'''
+
+```
 $ main.py
 
 ---------- Offline Handwritten Chinese Character Recognizer ----------
@@ -67,4 +68,4 @@ Continue? [Y/n]
 n
 
 Thanks for using Melnyk-Net Offline HCCR software!
-'''
+```
