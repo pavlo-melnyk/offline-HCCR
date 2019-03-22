@@ -55,6 +55,33 @@ class GlobalWeightedAveragePooling2D(GlobalAveragePooling2D):
 			return K.sum(inputs, axis=[2, 3])
 
 
+class GlobalWeightedOutputAveragePooling2D(GlobalAveragePooling2D):
+
+	def __init__(self, kernel_initializer='uniform', **kwargs):
+		self.kernel_initializer = kernel_initializer
+		super(GlobalWeightedOutputAveragePooling2D, self).__init__(**kwargs)
+
+	def build(self, input_shape):
+		if self.data_format == 'channels_last':
+			kernel_shape = [input_shape[-1]]
+		else:
+			kernel_shape = [input_shape[1]]
+
+		self.W = self.add_weight(name='W',
+								 shape=kernel_shape,
+								 initializer=self.kernel_initializer,
+								 trainable=True)
+		# print('input_shape:', input_shape)
+		super(GlobalWeightedOutputAveragePooling2D, self).build(input_shape)
+
+	def call(self, inputs):
+		inputs = inputs*self.W # element-wise multiplication for every entry of input
+		if self.data_format == 'channels_last':
+			return K.sum(inputs, axis=[1, 2])
+		else:
+			return K.sum(inputs, axis=[2, 3])
+
+
 def normalize_bitmap(bitmap):
 	# pad the bitmap to make it squared
 	pad_size = abs(bitmap.shape[0]-bitmap.shape[1]) // 2
