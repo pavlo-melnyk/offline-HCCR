@@ -41,9 +41,10 @@ class GlobalWeightedAveragePooling2D(GlobalAveragePooling2D):
 
 	def build(self, input_shape):
 		self.W = self.add_weight(name='W',
-								shape=input_shape[1:],
-								initializer=self.kernel_initializer,
-								trainable=True)
+					 shape=input_shape[1:],
+					 initializer=self.kernel_initializer,
+					 trainable=True
+		)
 
 		super(GlobalWeightedAveragePooling2D, self).build(input_shape)
 
@@ -68,9 +69,10 @@ class GlobalWeightedOutputAveragePooling2D(GlobalAveragePooling2D):
 			kernel_shape = [input_shape[1]]
 
 		self.W = self.add_weight(name='W',
-								shape=kernel_shape,
-								initializer=self.kernel_initializer,
-								trainable=True)
+					 shape=kernel_shape,
+					 initializer=self.kernel_initializer,
+					 trainable=True
+		)
 		
 		super(GlobalWeightedOutputAveragePooling2D, self).build(input_shape)
 
