@@ -178,3 +178,7 @@ n
 
 Thanks for using Melnyk-Net Offline HCCR software!
 ```
+
+## Credits:
+The functions *normalize_bitmap*, *tagcode_to_unicode* and *unicode_to_tagcode*
+are written by Alessandro and Francesco https://github.com/integeruser/CASIA-HWDB1.1-cnn
