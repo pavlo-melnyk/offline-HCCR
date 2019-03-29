@@ -23,7 +23,7 @@ class HCCR(object):
 		show_summary=False,
 	):
 		if not os.path.exists(model_filepath):
-			print("\nError: 'model.h5' not found")
+			print("\nError: 'Melnyk-Net.hdf5' not found")
 			print('Please, donwload the model and place it in the directory of this file.')
 			print('URL: https://drive.google.com/open?id=1s8PQo7CKpOGdo-eXwtYeweY8-yjs7RYp')
 			input('\npress Enter to exit')			

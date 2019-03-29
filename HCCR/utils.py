@@ -7,12 +7,14 @@ import os
 import struct
 
 import numpy as np
-import scipy.misc
+import scipy as sp 
 
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
 import h5py
+
+from scipy.io import loadmat 
 
 from skimage.filters import threshold_otsu
 
@@ -29,6 +31,9 @@ from keras import backend as K
 from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
 
+from keras.datasets import mnist, fashion_mnist, cifar10, cifar100
+
+
 
 IMG_SHAPE = (96, 96)
 
@@ -41,14 +46,14 @@ class GlobalWeightedAveragePooling2D(GlobalAveragePooling2D):
 
 	def build(self, input_shape):
 		self.W = self.add_weight(name='W',
-								shape=input_shape[1:],
-								initializer=self.kernel_initializer,
-								trainable=True)
-
+								 shape=input_shape[1:],
+								 initializer=self.kernel_initializer,
+								 trainable=True)
+		# print('input_shape:', input_shape)
 		super(GlobalWeightedAveragePooling2D, self).build(input_shape)
 
 	def call(self, inputs):
-		inputs = inputs * self.W 
+		inputs = inputs*self.W # element-wise multiplication for every entry of input
 		if self.data_format == 'channels_last':
 			return K.sum(inputs, axis=[1, 2])
 		else:
@@ -68,14 +73,14 @@ class GlobalWeightedOutputAveragePooling2D(GlobalAveragePooling2D):
 			kernel_shape = [input_shape[1]]
 
 		self.W = self.add_weight(name='W',
-								shape=kernel_shape,
-								initializer=self.kernel_initializer,
-								trainable=True)
-		
+								 shape=kernel_shape,
+								 initializer=self.kernel_initializer,
+								 trainable=True)
+		# print('input_shape:', input_shape)
 		super(GlobalWeightedOutputAveragePooling2D, self).build(input_shape)
 
 	def call(self, inputs):
-		inputs = inputs * self.W
+		inputs = inputs*self.W # element-wise multiplication for every entry of input
 		if self.data_format == 'channels_last':
 			return K.sum(inputs, axis=[1, 2])
 		else:
@@ -92,7 +97,7 @@ def normalize_bitmap(bitmap):
 	bitmap = np.lib.pad(bitmap, pad_dims, mode='constant', constant_values=255)
 
 	# rescale and add empty border
-	bitmap = scipy.misc.imresize(bitmap, (96 - 4*2, 96 - 4*2))
+	bitmap = sp.misc.imresize(bitmap, (96 - 4*2, 96 - 4*2))
 	bitmap = np.lib.pad(bitmap, ((4, 4), (4, 4)), mode='constant', constant_values=255)
 	assert bitmap.shape == IMG_SHAPE
 
@@ -177,3 +182,40 @@ def load_data(image_path=None):
 
 		return imgs, prepr_imgs
 
+
+def get_mnist_data(reshape=False, normalize=False):
+	# load the MNIST data:
+	(Xtrain, Ytrain), (Xtest, Ytest) = mnist.load_data()	
+	Xtrain = np.expand_dims(Xtrain, axis=3)
+	Xtest = np.expand_dims(Xtest, axis=3)
+	
+	if reshape:
+		N, K = len(Ytrain), len(set(Ytrain))
+		D = Xtrain.shape[1]*Xtrain.shape[2]
+		# reshape the data to be (NxD):
+		Xtrain, Xtest = Xtrain.reshape(N, D), Xtest.reshape(len(Xtest), D)
+
+	if normalize:
+		Xtrain = np.float32(Xtrain / 255.0)
+		Xtest = np.float32(Xtest / 255.0)
+
+	return (Xtrain, Ytrain), (Xtest, Ytest)
+
+
+def get_fashion_mnist_data(reshape=False, normalize=False):
+	# load the MNIST data:
+	(Xtrain, Ytrain), (Xtest, Ytest) = fashion_mnist.load_data()	
+	Xtrain = np.expand_dims(Xtrain, axis=3)
+	Xtest = np.expand_dims(Xtest, axis=3)
+	
+	if reshape:
+		N, K = len(Ytrain), len(set(Ytrain))
+		D = Xtrain.shape[1]*Xtrain.shape[2]
+		# reshape the data to be (NxD):
+		Xtrain, Xtest = Xtrain.reshape(N, D), Xtest.reshape(len(Xtest), D)
+
+	if normalize:
+		Xtrain = np.float32(Xtrain / 255.0)
+		Xtest = np.float32(Xtest / 255.0)
+
+	return (Xtrain, Ytrain), (Xtest, Ytest)
