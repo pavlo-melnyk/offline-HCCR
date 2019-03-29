@@ -1,4 +1,4 @@
-import os
+		import os
 
 import numpy as np
 
@@ -49,80 +49,80 @@ def melnyk_net(input_shape=(96, 96, 1), reg=1e-3, global_average_type='GWAP', us
 	input_ = Input(shape=input_shape)
 
 	x = Conv2D(64, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(input_)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(input_)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = Conv2D(64, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = AveragePooling2D(pool_size=(3, 3), strides=(2, 2), padding='same')(x)
 
 	x = Conv2D(96, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = Conv2D(64, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = Conv2D(96, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = AveragePooling2D(pool_size=(3, 3), strides=(2, 2), padding='same')(x)
 
 	x = Conv2D(128, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = Conv2D(96, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = Conv2D(128, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = AveragePooling2D(pool_size=(3, 3), strides=(2, 2), padding='same')(x)
 
 	x = Conv2D(256, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = Conv2D(192, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = Conv2D(256, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = AveragePooling2D(pool_size=(3, 3), strides=(2, 2), padding='same')(x)
 
 	x = Conv2D(448, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = Conv2D(256, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
 	x = Conv2D(448, (3, 3), padding='same', strides=(1, 1), kernel_initializer='he_normal', use_bias=False, 
-			   kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
+			kernel_regularizer=l2(reg), bias_regularizer=l2(reg))(x)
 	x = BatchNormalization()(x)
 	x = Activation('relu')(x)
 
