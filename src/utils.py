@@ -202,8 +202,8 @@ def get_mnist_data(reshape=False, normalize=False):
 	return (Xtrain, Ytrain), (Xtest, Ytest)
 
 
-def get_fashion_mnist_data(reshape=False, normalize=False):
-	# load the MNIST data:
+def get_fashion_mnist_data(reshape=False, normalize=False, add_label_names=False):
+	# load the Fashion-MNIST data:
 	(Xtrain, Ytrain), (Xtest, Ytest) = fashion_mnist.load_data()	
 	Xtrain = np.expand_dims(Xtrain, axis=3)
 	Xtest = np.expand_dims(Xtest, axis=3)
@@ -217,5 +217,9 @@ def get_fashion_mnist_data(reshape=False, normalize=False):
 	if normalize:
 		Xtrain = np.float32(Xtrain / 255.0)
 		Xtest = np.float32(Xtest / 255.0)
+
+	if add_label_names:
+		label_names = ['T-shirt/top', 'Trousers', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+		return (Xtrain, Ytrain), (Xtest, Ytest), label_names
 
 	return (Xtrain, Ytrain), (Xtest, Ytest)
