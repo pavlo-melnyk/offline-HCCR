@@ -54,7 +54,7 @@ class HCCR(object):
 
 			Wgwap = self.model.get_layer('global_weighted_average_pooling2d_1').get_weights()[0]
 			activation_layer = self.model.get_layer('activation_14')
-			model_tranc = Model(inputs=self.model.input, outputs=activation_layer.output)
+			model_trunc = Model(inputs=self.model.input, outputs=activation_layer.output)
 		
 			# get the feature map weights - 
 			# 'GWOAP - FC-3755' weight matrix:
@@ -62,7 +62,7 @@ class HCCR(object):
 			W = final_dense.get_weights()[0] # 448 x 3755
 
 			# get the feature maps:
-			fmaps = model_tranc.predict(x=prepr_imgs) # num_segments x 6 x 6 x 448
+			fmaps = model_trunc.predict(x=prepr_imgs) # num_segments x 6 x 6 x 448
 			fmaps *= Wgwap
 
 			for i in range(num_segments):
