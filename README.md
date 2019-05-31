@@ -1,11 +1,11 @@
 ﻿# Offline Handwritten Chinese Character Classifier
 ## Description:
 
-- recognizes isolated handwritten Chinese characters among 3755 classes of GB2312-80 level-1 standard;
+- recognizes isolated handwritten Chinese characters among 3755 classes of GB2312-80 standard level-1;
 
-- based on the CNN called Melnyk-Net [[Melnyk, P., You, Z. & Li, K. Soft Comput (2019)]](https://doi.org/10.1007/s00500-019-04083-3),
+- based on the CNN called Melnyk-Net [(Melnyk, P., You, Z. & Li, K. Soft Comput (2019))](https://doi.org/10.1007/s00500-019-04083-3),
 available for view [here](https://rdcu.be/bFdjx); 
-- the preprint is available [here](https://arxiv.org/abs/1812.11489);
+- the arXiv preprint is available [here](https://arxiv.org/abs/1812.11489);
 
 - implemented using the amazing Keras library with the TensorFlow backend: 
 ![Architecture](architecture.png)
@@ -132,7 +132,7 @@ Non-trainable params: 5,184
 Python3, tensorflow 1.7, keras 2.1.6, scipy, numpy, matplotlib, pandas, pyplotz, glob, struct, h5py
 
 ## Usage:
- - before using the application, please download [Melnyk-Net](https://drive.google.com/open?id=1s8PQo7CKpOGdo-eXwtYeweY8-yjs7RYp) and place it in the directory with the other files (don't rename it);
+ - before using the application, please download [Melnyk-Net](https://drive.google.com/open?id=1s8PQo7CKpOGdo-eXwtYeweY8-yjs7RYp) and place it in the *src* folder (don't rename it);
  - run 'main.py';
  - follow the prompt instructions:
     - specify the isolated character image/images directory (e.g. 'images'; it will upload all the images from this folder);
