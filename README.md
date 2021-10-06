@@ -1,10 +1,10 @@
 ﻿# Offline Handwritten Chinese Character Classifier
-## Description:
+## Description
 
 - recognizes isolated handwritten Chinese characters among 3755 classes of GB2312-80 standard level-1;
 
 - based on the CNN called Melnyk-Net [(Melnyk, P., You, Z. & Li, K. Soft Comput (2019))](https://doi.org/10.1007/s00500-019-04083-3),
-available for view [here](https://rdcu.be/bFdjx); 
+available for view [here](https://rdcu.be/bFdjx) [[bibtex]](https://github.com/pavlo-melnyk/offline-hccr#citation); 
 - the arXiv preprint is available [here](https://arxiv.org/abs/1812.11489);
 
 - implemented using the amazing Keras library with the TensorFlow backend: 
@@ -128,10 +128,10 @@ Non-trainable params: 5,184
 
 - **Total number of parameters** - 6,523,819 (~24.9 MB of storage).
 
-## Dependencies:
+## Dependencies
 Python3, tensorflow 1.7, keras 2.1.6, scipy, numpy, matplotlib, pandas, pyplotz, glob, struct, h5py
 
-## Usage:
+## Usage
  - before using the application, please download [Melnyk-Net](https://drive.google.com/open?id=1s8PQo7CKpOGdo-eXwtYeweY8-yjs7RYp) (don't rename it) and place it in the *src* folder;
  - run 'main.py';
  - follow the prompt instructions:
@@ -140,7 +140,7 @@ Python3, tensorflow 1.7, keras 2.1.6, scipy, numpy, matplotlib, pandas, pyplotz,
     - specify the number of candidates for recognition, *n*, - the program will show *n* most confident predictions per each character image.
     
 
-## Demo:
+## Demo
 ![Demo](demo.png)
 
 ```
@@ -181,6 +181,21 @@ n
 Thanks for using Melnyk-Net Offline HCCR software!
 ```
 
-## Credits:
+## Credits
 The functions *normalize_bitmap*, *tagcode_to_unicode* and *unicode_to_tagcode*
-are written by Alessandro and Francesco https://github.com/integeruser/CASIA-HWDB1.1-cnn
+are implemented by Alessandro and Francesco https://github.com/integeruser/CASIA-HWDB1.1-cnn
+
+
+## Citation
+```
+@article{melnyk2020high,
+  title={A high-performance CNN method for offline handwritten Chinese character recognition and visualization},
+  author={Melnyk, Pavlo and You, Zhiqiang and Li, Keqin},
+  journal={soft computing},
+  volume={24},
+  number={11},
+  pages={7977--7987},
+  year={2020},
+  publisher={Springer}
+}
+```
