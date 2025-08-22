@@ -8,6 +8,7 @@ import struct
 
 import numpy as np
 import scipy as sp 
+import tensorflow as tf
 
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -17,6 +18,8 @@ import h5py
 from scipy.io import loadmat 
 
 from skimage.filters import threshold_otsu
+
+from PIL import Image
 
 from glob import glob
 
@@ -29,9 +32,13 @@ from keras.layers import (
 )
 from keras import backend as K
 from keras.preprocessing import image
-from keras.preprocessing.image import ImageDataGenerator
+# from keras.preprocessing.image import ImageDataGenerator
 
 from keras.datasets import mnist, fashion_mnist, cifar10, cifar100
+
+# compatibility fix for older code:
+if not hasattr(np.lib, 'pad'):
+    np.lib.pad = np.pad
 
 
 
@@ -55,9 +62,9 @@ class GlobalWeightedAveragePooling2D(GlobalAveragePooling2D):
 	def call(self, inputs):
 		inputs = inputs*self.W # element-wise multiplication for every entry of input
 		if self.data_format == 'channels_last':
-			return K.sum(inputs, axis=[1, 2])
+			return tf.reduce_sum(inputs, axis=[1, 2]) # K.sum(inputs, axis=[1, 2])
 		else:
-			return K.sum(inputs, axis=[2, 3])
+			return tf.reduce_sum(inputs, axis=[1, 2]) # K.sum(inputs, axis=[2, 3])
 
 
 class GlobalWeightedOutputAveragePooling2D(GlobalAveragePooling2D):
@@ -82,9 +89,9 @@ class GlobalWeightedOutputAveragePooling2D(GlobalAveragePooling2D):
 	def call(self, inputs):
 		inputs = inputs*self.W # element-wise multiplication for every entry of input
 		if self.data_format == 'channels_last':
-			return K.sum(inputs, axis=[1, 2])
+			return tf.reduce_sum(inputs, axis=[1, 2]) # K.sum(inputs, axis=[1, 2])
 		else:
-			return K.sum(inputs, axis=[2, 3])
+			return tf.reduce_sum(inputs, axis=[1, 2]) # K.sum(inputs, axis=[2, 3])
 
 
 def normalize_bitmap(bitmap):
@@ -97,7 +104,8 @@ def normalize_bitmap(bitmap):
 	bitmap = np.lib.pad(bitmap, pad_dims, mode='constant', constant_values=255)
 
 	# rescale and add empty border
-	bitmap = sp.misc.imresize(bitmap, (96 - 4*2, 96 - 4*2))
+	# bitmap = sp.misc.imresize(bitmap, (96 - 4*2, 96 - 4*2))	
+	bitmap = imresize(bitmap, (96 - 4*2, 96 - 4*2))	
 	bitmap = np.lib.pad(bitmap, ((4, 4), (4, 4)), mode='constant', constant_values=255)
 	assert bitmap.shape == IMG_SHAPE
 
@@ -223,3 +231,121 @@ def get_fashion_mnist_data(reshape=False, normalize=False, add_label_names=False
 		return (Xtrain, Ytrain), (Xtest, Ytest), label_names
 
 	return (Xtrain, Ytrain), (Xtest, Ytest)
+
+
+def imresize(arr, size, interp='bilinear', mode=None):
+    """
+    Exact replacement for scipy.misc.imresize with identical behavior.
+    
+    Parameters:
+    -----------
+    arr : array_like
+        Input array (image)
+    size : tuple or float
+        Size of output image as (height, width) or scaling factor
+    interp : str
+        Interpolation method ('bilinear', 'nearest', 'cubic', etc.)
+    mode : str
+        PIL mode for handling data types ('F' for float, 'L' for grayscale, etc.)
+    
+    Returns:
+    --------
+    resized : ndarray
+        Resized array with same dtype as input
+    """
+    
+    # handle size parameter
+    if np.isscalar(size):
+        # if size is a scalar, it's a scaling factor:
+        if arr.ndim == 2:
+            new_size = (int(arr.shape[0] * size), int(arr.shape[1] * size))
+        else:
+            new_size = (int(arr.shape[0] * size), int(arr.shape[1] * size))
+    else:
+        # size is already (height, width) - scipy format:
+        new_size = tuple(size)
+    
+    # Store original dtype
+    original_dtype = arr.dtype
+    
+    # handle interpolation mapping:
+    interp_map = {
+        'nearest': Image.NEAREST,
+        'bilinear': Image.BILINEAR,
+        'bicubic': Image.BICUBIC,
+        'cubic': Image.BICUBIC,  # scipy used cubic as alias for bicubic
+        'lanczos': Image.LANCZOS
+    }
+    
+    pil_interp = interp_map.get(interp.lower(), Image.BILINEAR)
+    
+    # auto-detect mode if not specified (scipy behavior):
+    if mode is None:
+        if arr.dtype in [np.float32, np.float64]:
+            mode = 'F'  # float mode
+        elif arr.dtype == np.uint8:
+            if arr.ndim == 2:
+                mode = 'L'  # grayscale
+            elif arr.ndim == 3 and arr.shape[2] == 3:
+                mode = 'RGB'
+            elif arr.ndim == 3 and arr.shape[2] == 4:
+                mode = 'RGBA'
+            else:
+                mode = 'L'
+        else:
+            # convert to float for other types:
+            arr = arr.astype(np.float32)
+            mode = 'F'
+    
+    # handle different array dimensions
+    if arr.ndim == 2:
+        # 2D array (grayscale)
+        if mode == 'F':
+            # for float mode, ensure proper range
+            img = Image.fromarray(arr.astype(np.float32), mode='F')
+        else:
+            img = Image.fromarray(arr, mode=mode)
+        
+        # PIL uses (width, height), scipy used (height, width)
+        resized_img = img.resize((new_size[1], new_size[0]), pil_interp)
+        result = np.array(resized_img)
+        
+    elif arr.ndim == 3:
+        # 3D array (color or multi-channel):
+        if arr.shape[2] <= 4:  # standard RGB/RGBA
+            if mode == 'F':
+                # for float arrays, handle each channel separately to maintain precision:
+                channels = []
+                for i in range(arr.shape[2]):
+                    channel = arr[:, :, i].astype(np.float32)
+                    img = Image.fromarray(channel, mode='F')
+                    resized = img.resize((new_size[1], new_size[0]), pil_interp)
+                    channels.append(np.array(resized))
+                result = np.stack(channels, axis=2)
+            else:
+                img = Image.fromarray(arr, mode=mode)
+                resized_img = img.resize((new_size[1], new_size[0]), pil_interp)
+                result = np.array(resized_img)
+        else:
+            # multi-channel, handle each channel separately:
+            channels = []
+            for i in range(arr.shape[2]):
+                channel = arr[:, :, i]
+                if mode == 'F' or arr.dtype in [np.float32, np.float64]:
+                    img = Image.fromarray(channel.astype(np.float32), mode='F')
+                else:
+                    img = Image.fromarray(channel, mode='L')
+                resized = img.resize((new_size[1], new_size[0]), pil_interp)
+                channels.append(np.array(resized))
+            result = np.stack(channels, axis=2)
+    else:
+        raise ValueError(f"Unsupported array dimension: {arr.ndim}")
+    
+    # preserve original dtype:
+    if original_dtype != result.dtype:
+        if original_dtype in [np.uint8, np.int32, np.int64]:
+            result = np.round(result).astype(original_dtype)
+        else:
+            result = result.astype(original_dtype)
+    
+    return result

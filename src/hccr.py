@@ -6,6 +6,8 @@ import scipy as sp
 import matplotlib.pyplot as plt 
 import h5py
 
+from PIL import Image
+
 from keras.models import Model, load_model
 from pyplotz.pyplotz import PyplotZ
 from utils import (
@@ -30,7 +32,23 @@ class HCCR(object):
 			exit()
 
 		# load the model architecture:
-		self.model = load_model(model_filepath, custom_objects={"GlobalWeightedAveragePooling2D": GlobalWeightedAveragePooling2D})
+		# self.model = load_model(model_filepath, custom_objects={"GlobalWeightedAveragePooling2D": GlobalWeightedAveragePooling2D})
+		
+		# load the model without compiling (ignoring optimizer state):
+		self.model = load_model(
+			model_filepath, 
+			custom_objects={"GlobalWeightedAveragePooling2D": GlobalWeightedAveragePooling2D},
+			compile=False  # this skips loading the optimizer
+		)
+
+		# recompile with modern optimizer:
+		from tensorflow.keras.optimizers import SGD
+		self.model.compile(
+			optimizer=SGD(learning_rate=0.0001),  # use learning_rate instead of lr
+			loss='categorical_crossentropy',
+			metrics=['accuracy']
+		)
+		
 		self.label2tagcode = np.load(label2tagcode)
 		if show_summary:
 			print(self.model.summary())
@@ -73,7 +91,8 @@ class HCCR(object):
 				heat_map = fmaps[i].dot(w) #  (6 x 6)
 				
 				# resize and save the heat_map:
-				heat_map = sp.misc.imresize(heat_map, size=(96, 96), interp='bilinear', mode='F')
+				# heat_map = sp.misc.imresize(heat_map, size=(96, 96), interp='bilinear', mode='F')
+				heat_map = np.array(Image.fromarray(heat_map, mode='F').resize((96, 96), Image.BILINEAR))
 				heat_maps.append(heat_map)
 						
 		

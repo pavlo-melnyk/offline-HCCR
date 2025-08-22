@@ -129,7 +129,12 @@ Non-trainable params: 5,184
 - **Total number of parameters** - 6,523,819 (~24.9 MB of storage).
 
 ## Dependencies
-Python3, tensorflow 1.7, keras 2.1.6, scipy, numpy, matplotlib, pandas, pyplotz, glob, struct, h5py
+~~Python3, tensorflow 1.7, keras 2.1.6,~~ scipy, numpy, matplotlib, pandas, pyplotz, glob, struct, h5py
+
+**UPD** 2025-08-23: migrated from the legacy TensorFlow 1.7/Keras 2.1.6 stack to the modern versions
+```
+Python 3.12.0, tensorflow 2.20.0, keras 3.11.3, numpy 1.16.1, scipy 2.3.2
+```
 
 ## Usage
  - before using the application, please download [Melnyk-Net](https://drive.google.com/open?id=1s8PQo7CKpOGdo-eXwtYeweY8-yjs7RYp) (don't rename it) and place it in the *src* folder;
