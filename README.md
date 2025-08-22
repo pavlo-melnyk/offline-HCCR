@@ -137,7 +137,6 @@ Python 3.12.0, tensorflow 2.20.0, keras 3.11.3, numpy 1.16.1, scipy 2.3.2
 ```
 
 ## Usage
- - before using the application, please download [Melnyk-Net](https://drive.google.com/open?id=1s8PQo7CKpOGdo-eXwtYeweY8-yjs7RYp) (don't rename it) and place it in the *src* folder;
  - run 'main.py';
  - follow the prompt instructions:
     - specify the isolated character image/images directory (e.g. 'images'; it will upload all the images from this folder);
